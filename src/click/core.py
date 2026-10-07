@@ -2523,16 +2523,13 @@ class Parameter(ABC):
         """
         return self.name
 
-    def make_metavar(self, ctx: Context) -> str:
+    def make_metavar(self) -> str:
         if self.metavar is not None:
             return self.metavar
+        else:
+        metavar = self.type.get_metavar(self)
 
-        metavar = self.type.get_metavar(param=self, ctx=ctx)
-
-        if metavar is None:
-            metavar = self.type.name.upper()
-
-        if self.nargs != 1:
+        if self.multiple and metavar and not metavar.endswith("..."):
             metavar += "..."
 
         return metavar
